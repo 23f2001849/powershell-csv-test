@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Display</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-3">Product List</h1>
+        <table id="productTable" class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Product</th>
+                    <th scope="col">Price</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <h2>Total: <span id="total"></span></h2>
+    </div>
+    <script>
+        let total = 0;
+
+        function fetchCSV() {
+            fetch('products.csv')
+                .then(response => response.text())
+                .then(data => {
+                    let csvData = data.split('\n');
+                    csvData.shift();
+                    csvData.forEach(row => {
+                        let [product, price] = row.split(',');
+                        total += parseInt(price);
+                        document.querySelector('#productTable tbody').innerHTML += `<tr><td>${product}</td><td>${price}</td></tr>`;
+                    });
+                    document.querySelector('#total').innerText = total;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        fetchCSV();
+    </script>
+</body>
+</html>
